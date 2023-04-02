@@ -10,7 +10,7 @@ plugins {
     // Kotlin support
     id("org.jetbrains.kotlin.jvm") version "1.8.10"
     // Gradle IntelliJ Plugin
-    id("org.jetbrains.intellij") version "1.13.2"
+    id("org.jetbrains.intellij") version "1.13.3"
     // Gradle Changelog Plugin
     id("org.jetbrains.changelog") version "2.0.0"
     // Gradle Qodana Plugin
@@ -38,6 +38,10 @@ intellij {
     version.set(properties("platformVersion"))
     type.set(properties("platformType"))
 
+    downloadSources.set(true)
+    updateSinceUntilBuild.set(true)
+    localPath.set(properties("StudioRunPath"))
+
     // Plugin Dependencies. Uses `platformPlugins` property from the gradle.properties file.
     plugins.set(properties("platformPlugins").map { it.split(',').map(String::trim).filter(String::isNotEmpty) })
 }
@@ -62,6 +66,10 @@ kover.xmlReport {
 }
 
 tasks {
+    instrumentCode {
+        compilerVersion.set("203.7717.56") // 현재 사용중인 Android Studio Version
+    }
+
     wrapper {
         gradleVersion = properties("gradleVersion").get()
     }
